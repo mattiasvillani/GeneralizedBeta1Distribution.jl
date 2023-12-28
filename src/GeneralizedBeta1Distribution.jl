@@ -10,7 +10,7 @@ using Distributions, SpecialFunctions
 
 include("GeneralizedBeta1.jl")
 
-export mean, median, quantile, std, var, mode, params, params!, rand, rand!, skewness
+export mean, median, quantile, std, var, mode, params, params!, rand, rand!
 export pdf, cdf, logpdf, logcdf
 export GeneralizedBeta1
 

@@ -8,7 +8,7 @@ import Base.length
 The Generalized Beta distribution of the first kind GB1 is a four-parameter extension of standard Beta(α, β) distribution.
 
 ```math
-f(x) = \\frac{|γ|}{\delta^{\\alpha\\gamma}\\mathrm{B}(\\alpha,\\beta)} 
+f(x) = \\frac{|γ|}{\\delta^{\\alpha\\gamma}\\mathrm{B}(\\alpha,\\beta)} 
        x^{\\alpha\\gamma - 1}(1 - (x/ \\delta)^ \\gamma)^{\\beta - 1}, \\quad 0 < x < 1
 ```
  
@@ -35,8 +35,8 @@ julia> d = GeneralizedBeta1(2, 3, 1.5, 1)
 julia> rand(d, 4)'
 1×4 adjoint(::Vector{Float64}) with eltype Float64:
  1.00851  0.640297  0.566234  2.16941
-julia> pdf(d, 1)
-julia> cdf(d, 1)
+julia> pdf(d, 0.5)
+julia> cdf(d, 0.5)
 ```
 """ 
 struct GeneralizedBeta1{T<:Real} <: ContinuousUnivariateDistribution
@@ -48,16 +48,15 @@ struct GeneralizedBeta1{T<:Real} <: ContinuousUnivariateDistribution
 end
 
 function GeneralizedBeta1(α::T, β::T, γ::T, δ::T; check_args::Bool=true) where {T <: Real}
-    @check_args GeneralizedBeta1 (α, α > zero(α)) 
-    @check_args GeneralizedBeta1 (β, β > zero(β))
-    @check_args GeneralizedBeta1 (δ, β > zero(δ))
+    @check_args GeneralizedBeta1 (α, α > zero(α)) (β, β > zero(β)) (δ, δ > zero(δ))
     return GeneralizedBeta1{T}(α, β, γ, δ)
 end
 
-GeneralizedBeta1(α::Real, β::Real, γ::Real, δ::Real; check_args::Bool=true) = 
+GeneralizedBeta1(α::Real, β::Real, γ::Real, δ::Real; check_args::Bool=true) =           
     GeneralizedBeta1(promote(α, β, γ, δ)...; check_args = check_args)
-GeneralizedBeta1(α::Integer, β::Integer, γ::Integer, δ::Integer; check_args::Bool=true) 
-    = GeneralizedBeta1(float(α), float(β), float(γ), float(δ); check_args = check_args)
+GeneralizedBeta1(α::Integer, β::Integer, γ::Integer, δ::Integer; check_args::Bool=true) = 
+    GeneralizedBeta1(float(α), float(β), float(γ), float(δ); check_args = check_args)
+
 
 @distr_support GeneralizedBeta1 0 δ^γ
 
@@ -89,8 +88,7 @@ end
 
 Compute the pdf of the GeneralizedBeta1 distribution `d` at `x`. 
 """ 
-pdf(d::GeneralizedBeta1, x::Real) = ( abs(d.γ)/(d.δ^(d.α*d.γ)*beta(d.α,d.β)) )*
-    x^(d.α*d.γ - 1)*(1 - (x/d.δ)^d.γ)^(d.β - 1)
+pdf(d::GeneralizedBeta1, x::Real) = ( abs(d.γ)/(d.δ^(d.α*d.γ)*beta(d.α,d.β)) )*x^(d.α*d.γ - 1)*(1 - (x/d.δ)^d.γ)^(d.β - 1)
 
 
 """ 
@@ -98,8 +96,8 @@ pdf(d::GeneralizedBeta1, x::Real) = ( abs(d.γ)/(d.δ^(d.α*d.γ)*beta(d.α,d.β
 
 Compute the logpdf of the GeneralizedBeta1 distribution `d` at `x`. 
 """ 
-logpdf(d::GeneralizedBeta1, x::Real) = log(abs(d.γ))-(d.α*d.γ)*log(d.δ) - logbeta(d.α, d.β) 
-    + (d.α*d.γ - 1)*log(x) + (d.β - 1)*log(1 - (x/d.δ)^d.γ)
+logpdf(d::GeneralizedBeta1, x::Real) = log(abs(d.γ))-(d.α*d.γ)*log(d.δ) - 
+    logbeta(d.α, d.β) + (d.α*d.γ - 1)*log(x) + (d.β - 1)*log(1 - (x/d.δ)^d.γ)
 
 
 """ 
@@ -122,7 +120,7 @@ mean(d::GeneralizedBeta1)
 
 Compute the mean of the GeneralizedBeta1 distribution `d`. 
 """ 
-mean(d::GeneralizedBeta1) = d.δ * (Beta(d.α + 1/d.γ, d.β)/Beta(d.α, d.β))
+mean(d::GeneralizedBeta1) = d.δ * (beta(d.α + 1/d.γ, d.β)/beta(d.α, d.β))
 
 
 """ 
@@ -130,7 +128,7 @@ var(d::GeneralizedBeta1)
 
 Compute the variance of the GeneralizedBeta1 distribution `d`. 
 """ 
-var(d::GeneralizedBeta1) = (d.δ^2) * (Beta(d.α + 2/d.γ, d.β)/Beta(d.α, d.β)) - mean(d)^2
+var(d::GeneralizedBeta1) = (d.δ^2) * (beta(d.α + 2/d.γ, d.β) / beta(d.α, d.β)) - mean(d)^2
 
 
 """ 
