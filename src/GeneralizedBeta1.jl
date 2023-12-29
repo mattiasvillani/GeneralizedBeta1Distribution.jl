@@ -13,7 +13,7 @@ The density function is given by
 
 ```math
 f(x) = \\frac{|γ|}{\\delta^{\\alpha\\gamma}\\mathrm{B}(\\alpha,\\beta)} 
-       x^{\\alpha\\gamma - 1}(1 - (x/ \\delta)^ \\gamma)^{\\beta - 1}, \\quad 0 < x < 1
+       x^{\\alpha\\gamma - 1}(1 - (x/ \\delta)^ \\gamma)^{\\beta - 1}, \\quad 0 < x^\\gamma < \\delta^\\gamma
 ```
 
 
