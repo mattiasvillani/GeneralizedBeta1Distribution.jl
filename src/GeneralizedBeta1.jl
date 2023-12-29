@@ -7,22 +7,26 @@ import Base.length
 
 The Generalized Beta distribution of the first kind GB1 is a four-parameter extension of standard Beta(α, β) distribution.
 
+If Y ∼ Beta(α, β), then X = δ⋅Y^(1/γ) ∼ GeneralizedBeta1(α, β, γ, δ).
+
+The density function is given by
+
 ```math
 f(x) = \\frac{|γ|}{\\delta^{\\alpha\\gamma}\\mathrm{B}(\\alpha,\\beta)} 
        x^{\\alpha\\gamma - 1}(1 - (x/ \\delta)^ \\gamma)^{\\beta - 1}, \\quad 0 < x < 1
 ```
- 
-The distribution is defined by:
-
-If Y ∼ Beta(α, β), then X = (Y/δ)^γ ∼ GeneralizedBeta1(α, β, γ, δ).
 
 
 ```julia
 d = GeneralizedBeta1(2, 3, 1.5, 1)   
 
+rand(d, 10)        # Ten random number from the distribution
 params(d)          # Get the parameters, i.e. α, β, γ and δ
 pdf(d, 0.5)        # Probability density function at x = 0.5
+cdf(d, 0.5)        # Cumulative distribution function P(X <= x) at x = 0.5
+quantile(d, 0.5)   # Median
 mean(d)            # Mean 
+var(d)             # Variance 
 ```
 
 External links
