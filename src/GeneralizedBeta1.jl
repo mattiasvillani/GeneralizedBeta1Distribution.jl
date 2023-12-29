@@ -106,7 +106,7 @@ logpdf(d::GeneralizedBeta1, x::Real) = log(abs(d.γ))-(d.α*d.γ)*log(d.δ) -
 
 Compute the cdf of the GeneralizedBeta1 `d` at `x`. 
 """ 
-cdf(d::GeneralizedBeta1, x::Real) = beta_inc(d.α, d.β, (x/d.δ)^d.γ)[1]
+cdf(d::GeneralizedBeta1, x::Real) = d.γ > 0 ? beta_inc(d.α, d.β, (x/d.δ)^d.γ)[1] : 1 - beta_inc(d.α, d.β, (d.δ/x)^abs(d.γ))[1]
 
 
 """ 
