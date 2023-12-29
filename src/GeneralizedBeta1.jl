@@ -61,9 +61,6 @@ GeneralizedBeta1(α::Real, β::Real, γ::Real, δ::Real; check_args::Bool=true) 
 GeneralizedBeta1(α::Integer, β::Integer, γ::Integer, δ::Integer; check_args::Bool=true) = 
     GeneralizedBeta1(float(α), float(β), float(γ), float(δ); check_args = check_args)
 
-
-@distr_support GeneralizedBeta1 0 δ^γ
-
 Base.eltype(::Type{GeneralizedBeta1{T}}) where {T} = T
 
 #### Conversions
@@ -124,7 +121,7 @@ mean(d::GeneralizedBeta1)
 
 Compute the mean of the GeneralizedBeta1 distribution `d`. 
 """ 
-mean(d::GeneralizedBeta1) = d.δ * (beta(d.α + 1/d.γ, d.β)/beta(d.α, d.β))
+mean(d::GeneralizedBeta1) = d.α+1/d.γ>0 ? d.δ*(beta(d.α + 1/d.γ, d.β)/beta(d.α, d.β)) : NaN
 
 
 """ 
@@ -132,7 +129,7 @@ var(d::GeneralizedBeta1)
 
 Compute the variance of the GeneralizedBeta1 distribution `d`. 
 """ 
-var(d::GeneralizedBeta1) = (d.δ^2) * (beta(d.α + 2/d.γ, d.β) / beta(d.α, d.β)) - mean(d)^2
+var(d::GeneralizedBeta1) = d.α+2/d.γ>0 ? (d.δ^2) * (beta(d.α + 2/d.γ, d.β) / beta(d.α, d.β)) - mean(d)^2 : NaN
 
 
 """ 
